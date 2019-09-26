@@ -1,0 +1,5 @@
+{
+  "name": "@blast-engine/find-recursively-up",
+  "version": "0.0.0",
+  "main": "./lib.js"
+}
