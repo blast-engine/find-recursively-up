@@ -1,30 +1,27 @@
 const fs = require('fs')
 const path = require('path')
 
-const findDirectoryRecursivelyUp = async (dir, check) => {
-
-  const root = path.parse(process.cwd()).root
-  const resolved = path.resolve(dir)
+const findDirectoryRecursivelyUp = async (startingDir, check) => {
+  const root = path.parse(startingDir).root
+  const resolvedStartingDir = path.resolve(startingDir)
   
-  const found = await check(resolved)
+  const found = await check(resolvedStartingDir)
 
-  if (found) return resolved
-  else if (resolved === root) return null
-  else return findDirectoryRecursivelyUp(path.resolve(resolved, '..'), check)
-
+  if (found) return resolvedStartingDir
+  else if (resolvedStartingDir === root) return null
+  else return findDirectoryRecursivelyUp(path.resolve(resolvedStartingDir, '..'), check)
 }
 
-const findFileRecursivelyUp = async name => {
-  
+const findFileRecursivelyUp = async (name, startingDir) => {
+  if (!name || !startingDir) throw new Error('need name and startingDir')
+
   const dir = await findDirectoryRecursivelyUp(
-    process.cwd(),
+    startingDir,
     async dir => fs.existsSync(path.resolve(dir, name))
   )
   
   if (!dir) return null
-
   return path.resolve(dir, name)
-
 }
 
 module.exports = { 
