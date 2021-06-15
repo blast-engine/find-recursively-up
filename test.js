@@ -4,7 +4,6 @@ const lib = require('./lib')
 
   const ret = await lib.findFileRecursivelyUp('ag.code-workspace', __dirname)
 
-  debugger
   console.log(ret)
 
 })()
